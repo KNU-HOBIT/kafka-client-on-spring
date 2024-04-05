@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: kafka-client-on-spring-container
-          image: noyusu/kafka-client-on-spring:0.0.1 # Image that will be used to containers int the cluster
+          image: noyusu/kafka-client-on-spring:0.0.2 # Image that will be used to containers int the cluster
           ports:
             - containerPort: 8789 # The port that the container is running on in the cluster
