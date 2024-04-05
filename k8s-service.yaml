@@ -4,9 +4,10 @@ metadata:
   name: kafka-client-on-spring-service
 spec:
   selector:
-    app: kafka-client-on-spring
+    app: kafka-client-on-spring-deployment
   ports:
-    - protocol: "TCP"
+    - protocol: TCP
       port: 8789  # The port that the container is running on in the cluster
       targetPort: 8789  # The port exposed by the service
-  type: NodePort # type of the service
+      nodePort: 32132
+  type: LoadBalancer # type of the service
