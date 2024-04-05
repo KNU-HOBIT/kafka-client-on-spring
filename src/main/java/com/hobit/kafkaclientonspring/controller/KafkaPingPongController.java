@@ -1,39 +1,40 @@
 package com.hobit.kafkaclientonspring.controller;
 
-import com.hobit.kafkaclientonspring.service.HobitKafkaConsumerService;
+import com.hobit.kafkaclientonspring.service.HobitKafkaPingPongService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
-public class KafkaConsumerController {
+public class KafkaPingPongController {
 
-    private final HobitKafkaConsumerService hobitKafkaConsumerService;
+    private final HobitKafkaPingPongService hobitKafkaPingPongService;
 
     @Autowired
-    public KafkaConsumerController(HobitKafkaConsumerService kafkaConsumerService) {
-        this.hobitKafkaConsumerService = kafkaConsumerService;
+    public KafkaPingPongController(HobitKafkaPingPongService kafkaConsumerService) {
+        this.hobitKafkaPingPongService = kafkaConsumerService;
     }
 
-    @PostMapping("/create-consumer")
+    @PostMapping("/create-pingpong")
     public String createConsumer(@RequestParam("bootstrapServers") String bootstrapServers,
                                  @RequestParam("group") String group,
-                                 @RequestParam("topic") String topic
+                                 @RequestParam("topic") String topic,
+                                 @RequestParam("pongTopic") String pongTopic
                                  ) {
-        hobitKafkaConsumerService.createConsumer(bootstrapServers, group, topic);
+        hobitKafkaPingPongService.createConsumer(bootstrapServers, group, topic, pongTopic);
         return "Consumer created for topic: " + topic + ", group: " + group;
     }
 
-    @PostMapping("/shutdown-consumers-by-topic")
+    @PostMapping("/shutdown-pingpongs-by-topic")
     public String shutdownConsumerByTopic(@RequestParam("topic") String topic) {
-        hobitKafkaConsumerService.shutdownConsumersByTopic(topic);
+        hobitKafkaPingPongService.shutdownConsumersByTopic(topic);
         return "Consumers shut down";
     }
 
-    @PostMapping("/shutdown-all-consumers")
+    @PostMapping("/shutdown-all-pingpongs")
     public String shutdownConsumers() {
-            hobitKafkaConsumerService.shutdownAllConsumers();
+            hobitKafkaPingPongService.shutdownAllConsumers();
             return "Consumers shut down";
     }
 }

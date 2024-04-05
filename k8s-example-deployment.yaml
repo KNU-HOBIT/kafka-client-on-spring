@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-client-on-spring-deployment
+  label: kafka-client-on-spring
+spec:
+  replicas: 3 # Number of replicas that will be created for this deployment
+  selector:
+    matchLabels:
+      app: kafka-client-on-spring-deployment
+  template:
+    metadata:
+      labels:
+        app: kafka-client-on-spring-deployment
+    spec:
+      containers:
+        - name: kafka-client-on-spring-container
+          image: noyusu/kafka-client-on-spring:0.0.1 # Image that will be used to containers int the cluster
+          ports:
+            - containerPort: 8789 # The port that the container is running on in the cluster
