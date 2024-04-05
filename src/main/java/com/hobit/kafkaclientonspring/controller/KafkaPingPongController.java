@@ -1,6 +1,8 @@
 package com.hobit.kafkaclientonspring.controller;
 
 import com.hobit.kafkaclientonspring.service.HobitKafkaPingPongService;
+import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +14,17 @@ public class KafkaPingPongController {
     private final HobitKafkaPingPongService hobitKafkaPingPongService;
 
     @Autowired
+    Environment env;
+
+
+    @Autowired
     public KafkaPingPongController(HobitKafkaPingPongService kafkaConsumerService) {
         this.hobitKafkaPingPongService = kafkaConsumerService;
+    }
+
+    @GetMapping("/status")
+    public String status() {
+        return "Status - returned by Pod - " + env.getProperty("HOSTNAME");
     }
 
     @PostMapping("/create-pingpong")
@@ -21,7 +32,7 @@ public class KafkaPingPongController {
                                  @RequestParam("group") String group,
                                  @RequestParam("topic") String topic,
                                  @RequestParam("pongTopic") String pongTopic
-                                 ) {
+    ) {
         hobitKafkaPingPongService.createConsumer(bootstrapServers, group, topic, pongTopic);
         return "Consumer created for topic: " + topic + ", group: " + group;
     }
@@ -34,8 +45,8 @@ public class KafkaPingPongController {
 
     @PostMapping("/shutdown-all-pingpongs")
     public String shutdownConsumers() {
-            hobitKafkaPingPongService.shutdownAllConsumers();
-            return "Consumers shut down";
+        hobitKafkaPingPongService.shutdownAllConsumers();
+        return "Consumers shut down";
     }
 }
 
